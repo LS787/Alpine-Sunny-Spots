@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpine Sunny Spots - Weather Finder</title>
+    <title>Alpine Sunny Spots - Multi-Source Weather Finder</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet" href="styles.css">
@@ -11,7 +11,7 @@
 <body>
     <div class="header">
         <h1>🏔️ Alpine Sunny Spots</h1>
-        <p>Find tomorrow's best weather in the Alps for hiking and skiing</p>
+        <p>Find tomorrow's best weather in the Alps with multi-source data</p>
     </div>
 
     <div class="container">
@@ -35,13 +35,17 @@
 
             <div class="search-box">
                 <div class="api-key-box">
-                    <strong>⚡ Quick Setup:</strong><br>
-                    1. Get free API key from <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a><br>
-                    2. Paste it below to get real weather data!
-                    <input type="password" class="api-key-input" id="apiKeyInput" placeholder="Enter your OpenWeatherMap API key">
+                    <strong>⚡ Multi-Source Weather Setup:</strong><br>
+                    📡 <strong>Open-Meteo:</strong> Always active (no key needed!)<br>
+                    🌤️ <strong>OpenWeatherMap:</strong> <a href="https://openweathermap.org/api" target="_blank">Get free API key</a><br>
+                    <input type="password" class="api-key-input" id="openWeatherApiKey" placeholder="OpenWeatherMap API key (optional)">
+                    ⚡ <strong>WeatherAPI:</strong> <a href="https://www.weatherapi.com/" target="_blank">Get free API key</a><br>
+                    <input type="password" class="api-key-input" id="weatherApiKey" placeholder="WeatherAPI key (optional)">
                 </div>
                 <div class="instructions">
                     <strong>How to use:</strong><br>
+                    • <strong>Basic:</strong> Works immediately with Open-Meteo (no API key needed!)<br>
+                    • <strong>Enhanced:</strong> Add API keys above for multi-source weather comparison<br>
                     • Click "📍 Click Points" and click up to 10 locations on the map<br>
                     • Or click "⬟ Draw Area" and draw a polygon to compare weather in that region<br>
                     • Or search for specific Alpine locations below
@@ -51,10 +55,10 @@
             </div>
 
             <div class="locations-list">
-                <h3>📊 Weather Comparison (0/10 locations)</h3>
+                <h3>📊 Multi-Source Weather Comparison (0/10 locations)</h3>
                 <div id="locationsList">
                     <div class="loading">
-                        Click on the map or search for locations to see tomorrow's weather forecast!
+                        Click on the map or search for locations to see multi-source weather forecast!
                     </div>
                 </div>
             </div>

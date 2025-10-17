@@ -34,6 +34,27 @@ async function initializeCompleteApp() {
     console.log('All libraries loaded successfully!');
     setTimeout(() => {
       initDateTime();
+      async function initializeCompleteApp() {
+  try {
+    console.log('Loading Leaflet library...');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js');
+    
+    console.log('Loading Leaflet Draw plugin...');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js');
+    
+    console.log('All libraries loaded successfully!');
+    setTimeout(() => {
+      initDateTime();
+      loadSavedApiKeys();  // ADD THIS LINE
+      initMap();
+      console.log('Complete Alpine Weather App ready!');
+    }, 100);
+    
+  } catch (error) {
+    console.error('Library loading failed:', error);
+    alert('Failed to load map libraries. Please refresh the page.');
+  }
+}
       initMap();
       console.log('Complete Alpine Weather App ready!');
     }, 100);
@@ -56,7 +77,23 @@ function initDateTime() {
   
   updateSelectedDateTime();
 }
-
+// Load saved API keys from browser storage
+function loadSavedApiKeys() {
+  const savedOpenWeather = localStorage.getItem('openWeatherApiKey');
+  const savedWeatherApi = localStorage.getItem('weatherApiKey');
+  
+  if (savedOpenWeather) {
+    apiKeys.openWeather = savedOpenWeather;
+    document.getElementById('openWeatherApiKey').value = savedOpenWeather;
+  }
+  
+  if (savedWeatherApi) {
+    apiKeys.weatherApi = savedWeatherApi;
+    document.getElementById('weatherApiKey').value = savedWeatherApi;
+  }
+  
+  console.log('Saved API keys loaded!');
+}
 function updateSelectedDateTime() {
   const dateInput = document.getElementById('dateInput').value;
   const timeInput = document.getElementById('timeInput').value;

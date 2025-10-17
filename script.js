@@ -87,123 +87,7 @@ function initMap() {
 
     map.on('click', function(e) {
       if (currentMode === 'click' && locations.length < 10) {
-    // Enhanced function with reverse geocoding
-async function addLocationByCoordinates(lat, lng, name) {
-  if (locations.length >= 10) {
-    alert('Maximum 10 locations allowed.');
-    return;
-  }
-
-  // If no name provided, get it from reverse geocoding
-  if (!name) {
-    try {
-      name = await reverseGeocode(lat, lng);
-    } catch (error) {
-      console.error('Reverse geocoding failed:', error);
-      name = `Location ${locations.length + 1}`;
-    }
-  }
-
-  const location = {
-    id: Date.now(),
-    lat: lat,
-    lng: lng,
-    name: name,
-    weather: null,
-    marker: null
-  };
-
-  const marker = L.marker([lat, lng]).addTo(map);
-  marker.bindPopup(name);
-  location.marker = marker;
-
-  locations.push(location);
-  fetchWeatherData(location);
-  updateLocationsList();
-}
-
-// New function: Reverse geocoding to get place names
-async function reverseGeocode(lat, lng) {
-  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12&accept-language=en`;
-  
-  try {
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'AlpineSunnySpots/1.0'
-      }
-    });
-    
-    const data = await response.json();
-    
-    if (data && data.address) {
-      // Try to get the most relevant location name
-      const address = data.address;
-      
-      // Priority: village > town > city > municipality > county
-      const placeName = 
-        address.village || 
-        address.town || 
-        address.city || 
-        address.municipality || 
-        address.hamlet ||
-        address.county ||
-        address.state ||
-        'Unknown Location';
-      
-      // Add country for context if in Alps region
-      const country = address.country_code ? ` (${address.country_code.toUpperCase()})` : '';
-      
-      return `${placeName}${country}`;
-    }
-    
-    return `Location (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
-    
-  } catch (error) {
-    console.error('Reverse geocoding error:', error);
-    return `Location (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
-  }
-}
-        // New function: Reverse geocoding to get place names
-async function reverseGeocode(lat, lng) {
-  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12&accept-language=en`;
-  
-  try {
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'AlpineSunnySpots/1.0'
-      }
-    });
-    
-    const data = await response.json();
-    
-    if (data && data.address) {
-      // Try to get the most relevant location name
-      const address = data.address;
-      
-      // Priority: village > town > city > municipality > county
-      const placeName = 
-        address.village || 
-        address.town || 
-        address.city || 
-        address.municipality || 
-        address.hamlet ||
-        address.county ||
-        address.state ||
-        'Unknown Location';
-      
-      // Add country for context if in Alps region
-      const country = address.country_code ? ` (${address.country_code.toUpperCase()})` : '';
-      
-      return `${placeName}${country}`;
-    }
-    
-    return `Location (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
-    
-  } catch (error) {
-    console.error('Reverse geocoding error:', error);
-    return `Location (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
-  }
-}
+        addLocationByCoordinates(e.latlng.lat, e.latlng.lng);
       }
     });
 
@@ -333,24 +217,75 @@ function searchLocation() {
     });
 }
 
-// Add location with full weather analysis
-function addLocationByCoordinates(lat, lng, name) {
+// Reverse geocoding to get place names
+async function reverseGeocode(lat, lng) {
+  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12&accept-language=en`;
+  
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'AlpineSunnySpots/1.0'
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (data && data.address) {
+      const address = data.address;
+      
+      // Priority: village > town > city > municipality > county
+      const placeName = 
+        address.village || 
+        address.town || 
+        address.city || 
+        address.municipality || 
+        address.hamlet ||
+        address.county ||
+        address.state ||
+        'Unknown Location';
+      
+      // Add country for context
+      const country = address.country_code ? ` (${address.country_code.toUpperCase()})` : '';
+      
+      return `${placeName}${country}`;
+    }
+    
+    return `Location (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
+    
+  } catch (error) {
+    console.error('Reverse geocoding error:', error);
+    return `Location (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
+  }
+}
+
+// Add location with automatic place name
+async function addLocationByCoordinates(lat, lng, name) {
   if (locations.length >= 10) {
     alert('Maximum 10 locations allowed.');
     return;
+  }
+
+  // If no name provided, get it from reverse geocoding
+  if (!name) {
+    try {
+      name = await reverseGeocode(lat, lng);
+    } catch (error) {
+      console.error('Reverse geocoding failed:', error);
+      name = `Location ${locations.length + 1}`;
+    }
   }
 
   const location = {
     id: Date.now(),
     lat: lat,
     lng: lng,
-    name: name || `Location ${locations.length + 1}`,
+    name: name,
     weather: null,
     marker: null
   };
 
   const marker = L.marker([lat, lng]).addTo(map);
-  marker.bindPopup(location.name);
+  marker.bindPopup(name);
   location.marker = marker;
 
   locations.push(location);
@@ -803,4 +738,4 @@ function getWeatherIcon(weatherMain, clouds) {
 // Start the complete app when page loads
 window.addEventListener('load', initializeCompleteApp);
 
-console.log('Complete Alpine Weather App script loaded successfully!');
+console.log('Complete Alpine Weather App with reverse geocoding loaded successfully!');

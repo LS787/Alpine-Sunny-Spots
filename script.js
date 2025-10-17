@@ -158,8 +158,10 @@ function setupEventListeners() {
   document.getElementById('timeInput').addEventListener('change', updateSelectedDateTime);
 
   // Multi-source API key handling
+ // Save API keys to browser storage when entered
   document.getElementById('openWeatherApiKey').addEventListener('input', function(e) {
     apiKeys.openWeather = e.target.value.trim();
+    localStorage.setItem('openWeatherApiKey', apiKeys.openWeather);
     if (apiKeys.openWeather) {
       locations.forEach(loc => fetchWeatherData(loc));
     }
@@ -167,15 +169,9 @@ function setupEventListeners() {
 
   document.getElementById('weatherApiKey').addEventListener('input', function(e) {
     apiKeys.weatherApi = e.target.value.trim();
+    localStorage.setItem('weatherApiKey', apiKeys.weatherApi);
     if (apiKeys.weatherApi) {
       locations.forEach(loc => fetchWeatherData(loc));
-    }
-  });
-
-  // Enter key support for search
-  document.getElementById('locationSearch').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      searchLocation();
     }
   });
 }

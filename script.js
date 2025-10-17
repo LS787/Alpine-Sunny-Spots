@@ -1,5 +1,18 @@
 console.log('Advanced Alpine Weather App initializing...');
-
+// Initialize storage on page load
+function initStorage() {
+  const savedOpenWeather = localStorage.getItem('openWeatherApiKey');
+  const savedWeatherApi = localStorage.getItem('weatherApiKey');
+  
+  if (savedOpenWeather) {
+    apiKeys.openWeather = savedOpenWeather;
+  }
+  if (savedWeatherApi) {
+    apiKeys.weatherApi = savedWeatherApi;
+  }
+  
+  console.log('Storage initialized');
+}
 // Global variables
 let map;
 let locations = [];
@@ -43,9 +56,10 @@ async function initializeCompleteApp() {
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js');
     
     console.log('All libraries loaded successfully!');
-    setTimeout(() => {
+  setTimeout(() => {
       initDateTime();
-      loadSavedApiKeys();  // ADD THIS LINE
+      initStorage();
+      restoreApiKeyInputs();
       initMap();
       console.log('Complete Alpine Weather App ready!');
     }, 100);
@@ -76,6 +90,20 @@ function initDateTime() {
   document.getElementById('timeInput').value = '12:00';
   
   updateSelectedDateTime();
+}
+// Restore saved API keys to input fields
+function restoreApiKeyInputs() {
+  const openWeatherKey = localStorage.getItem('openWeatherApiKey');
+  const weatherApiKey = localStorage.getItem('weatherApiKey');
+  
+  if (openWeatherKey) {
+    document.getElementById('openWeatherApiKey').value = openWeatherKey;
+  }
+  if (weatherApiKey) {
+    document.getElementById('weatherApiKey').value = weatherApiKey;
+  }
+  
+  console.log('API key inputs restored');
 }
 // Load saved API keys from browser storage
 function loadSavedApiKeys() {
@@ -196,17 +224,19 @@ function setupEventListeners() {
 
   // Multi-source API key handling
  // Save API keys to browser storage when entered
-  document.getElementById('openWeatherApiKey').addEventListener('input', function(e) {
+ document.getElementById('openWeatherApiKey').addEventListener('change', function(e) {
     apiKeys.openWeather = e.target.value.trim();
     localStorage.setItem('openWeatherApiKey', apiKeys.openWeather);
+    console.log('OpenWeather API key saved');
     if (apiKeys.openWeather) {
       locations.forEach(loc => fetchWeatherData(loc));
     }
   });
 
-  document.getElementById('weatherApiKey').addEventListener('input', function(e) {
+  document.getElementById('weatherApiKey').addEventListener('change', function(e) {
     apiKeys.weatherApi = e.target.value.trim();
     localStorage.setItem('weatherApiKey', apiKeys.weatherApi);
+    console.log('WeatherAPI key saved');
     if (apiKeys.weatherApi) {
       locations.forEach(loc => fetchWeatherData(loc));
     }
@@ -769,6 +799,9 @@ function getWeatherIcon(weatherMain, clouds) {
 }
 
 // Start the complete app when page loads
-window.addEventListener('load', initializeCompleteApp);
+window.addEventListener('load', function() {
+  initStorage();
+  initializeCompleteApp();
+});
 
 console.log('Complete Alpine Weather App with reverse geocoding loaded successfully!');

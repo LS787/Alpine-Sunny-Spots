@@ -689,6 +689,7 @@ function analyzePolygonWeather(polygonLayer) {
 }
 
 // Enhanced display with full multi-source information
+// Enhanced display with full multi-source information
 function updateLocationsList() {
   const listElement = document.getElementById('locationsList');
   const titleElement = document.querySelector('.locations-list h3');
@@ -783,8 +784,7 @@ function updateLocationsList() {
             UV Index
           </div>
           <div class="weather-detail">
-            <strong>🎯 ${weather.source
-                        Count}/3</strong>
+            <strong>🎯 ${weather.sourceCount}/3</strong>
             Active sources
           </div>
         </div>

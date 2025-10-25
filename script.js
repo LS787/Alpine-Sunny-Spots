@@ -216,6 +216,8 @@ function setupEventListeners() {
       if (layer instanceof L.Marker) {
         map.removeLayer(layer);
       }
+        updateApiKeyDisplay();
+}
     });
   });
 

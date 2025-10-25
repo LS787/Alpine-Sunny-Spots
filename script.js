@@ -797,7 +797,37 @@ function getWeatherIcon(weatherMain, clouds) {
   if (weatherMain === 'Mist' || weatherMain === 'Fog') return '🌫️';
   return '🌤️';
 }
+// Toggle instructions visibility
+function toggleInstructions() {
+  const instructions = document.getElementById('instructions');
+  instructions.classList.toggle('collapsed');
+}
 
+// Show/hide API key box based on saved keys
+function updateApiKeyDisplay() {
+  const hasOpenWeather = localStorage.getItem('openWeatherApiKey');
+  const hasWeatherApi = localStorage.getItem('weatherApiKey');
+  
+  const apiKeyBox = document.getElementById('apiKeyBox');
+  const apiStatus = document.getElementById('apiStatus');
+  
+  if (hasOpenWeather || hasWeatherApi) {
+    apiKeyBox.classList.add('hidden');
+    apiStatus.style.display = 'block';
+  } else {
+    apiKeyBox.classList.remove('hidden');
+    apiStatus.style.display = 'none';
+  }
+}
+
+// Show API key box for editing
+function showApiKeyBox() {
+  const apiKeyBox = document.getElementById('apiKeyBox');
+  const apiStatus = document.getElementById('apiStatus');
+  
+  apiKeyBox.classList.remove('hidden');
+  apiStatus.style.display = 'none';
+}
 // Start the complete app when page loads
 window.addEventListener('load', function() {
   initStorage();

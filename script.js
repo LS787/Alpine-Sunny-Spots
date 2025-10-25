@@ -60,6 +60,7 @@ async function initializeCompleteApp() {
       initDateTime();
       initStorage();
       restoreApiKeyInputs();
+      updateApiKeyDisplay();
       initMap();
       console.log('Complete Alpine Weather App ready!');
     }, 100);

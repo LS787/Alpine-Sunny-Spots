@@ -33,26 +33,38 @@
                 </div>
             </div>
 
-            <div class="search-box">
-                <div class="api-key-box">
-                    <strong>⚡ Multi-Source Weather Setup:</strong><br>
-                    📡 <strong>Open-Meteo:</strong> Always active (no key needed!)<br>
-                    🌤️ <strong>OpenWeatherMap:</strong> <a href="https://openweathermap.org/api" target="_blank">Get free API key</a><br>
-                    <input type="password" class="api-key-input" id="openWeatherApiKey" placeholder="OpenWeatherMap API key (optional)">
-                    ⚡ <strong>WeatherAPI:</strong> <a href="https://www.weatherapi.com/" target="_blank">Get free API key</a><br>
-                    <input type="password" class="api-key-input" id="weatherApiKey" placeholder="WeatherAPI key (optional)">
-                </div>
-                <div class="instructions">
-                    <strong>How to use:</strong><br>
-                    • <strong>Basic:</strong> Works immediately with Open-Meteo (no API key needed!)<br>
-                    • <strong>Enhanced:</strong> Add API keys above for multi-source weather comparison<br>
-                    • Click "📍 Click Points" and click up to 10 locations on the map<br>
-                    • Or click "⬟ Draw Area" and draw a polygon to compare weather in that region<br>
-                    • Or search for specific Alpine locations below
-                </div>
-                <input type="text" class="search-input" id="locationSearch" placeholder="Search Alpine locations (e.g., Chamonix, Zermatt, Innsbruck)">
-                <button class="search-btn" onclick="searchLocation()">🔍 Add Location</button>
-            </div>
+           <div class="search-box">
+  <div class="api-status" id="apiStatus" style="display: none;">
+    <strong>✅ API Keys Saved!</strong><br>
+    <small>Your weather sources are active and ready</small><br>
+    <button onclick="showApiKeyBox()">Edit API Keys</button>
+  </div>
+
+  <div class="api-key-box" id="apiKeyBox">
+    <strong>⚡ Multi-Source Weather Setup:</strong><br>
+    📡 <strong>Open-Meteo:</strong> Always active (no key needed!)<br>
+    🌤️ <strong>OpenWeatherMap:</strong> <a href="https://openweathermap.org/api" target="_blank">Get free API key</a><br>
+    <input type="password" class="api-key-input" id="openWeatherApiKey" placeholder="OpenWeatherMap API key (optional)">
+    ⚡ <strong>WeatherAPI:</strong> <a href="https://www.weatherapi.com/" target="_blank">Get free API key</a><br>
+    <input type="password" class="api-key-input" id="weatherApiKey" placeholder="WeatherAPI key (optional)">
+  </div>
+
+  <button class="instructions-toggle" onclick="toggleInstructions()">
+    📖 How to Use
+  </button>
+
+  <div class="instructions collapsed" id="instructions">
+    <strong>How to use:</strong><br>
+    • <strong>Basic:</strong> Works immediately with Open-Meteo (no API key needed!)<br>
+    • <strong>Enhanced:</strong> Add API keys above for multi-source weather comparison<br>
+    • Click "📍 Click Points" and click up to 10 locations on the map<br>
+    • Or click "⬟ Draw Area" and draw a polygon to compare weather in that region<br>
+    • Or search for specific Alpine locations below
+  </div>
+
+  <input type="text" class="search-input" id="locationSearch" placeholder="Search Alpine locations (e.g., Chamonix, Zermatt, Innsbruck)">
+  <button class="search-btn" onclick="searchLocation()">🔍 Add Location</button>
+</div>
 
             <div class="locations-list">
                 <h3>📊 Multi-Source Weather Comparison (0/10 locations)</h3>

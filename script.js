@@ -227,15 +227,18 @@ function setupEventListeners() {
  document.getElementById('openWeatherApiKey').addEventListener('change', function(e) {
     apiKeys.openWeather = e.target.value.trim();
     localStorage.setItem('openWeatherApiKey', apiKeys.openWeather);
-    console.log('OpenWeather API key saved');
+    updateApiKeyDisplay();
+      console.log('OpenWeather API key saved');
     if (apiKeys.openWeather) {
       locations.forEach(loc => fetchWeatherData(loc));
+      
     }
   });
 
   document.getElementById('weatherApiKey').addEventListener('change', function(e) {
     apiKeys.weatherApi = e.target.value.trim();
     localStorage.setItem('weatherApiKey', apiKeys.weatherApi);
+    updateApiKeyDisplay();
     console.log('WeatherAPI key saved');
     if (apiKeys.weatherApi) {
       locations.forEach(loc => fetchWeatherData(loc));

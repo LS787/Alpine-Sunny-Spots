@@ -1,4 +1,16 @@
 console.log('Advanced Alpine Weather App initializing...');
+
+// Global variables
+let map;
+let locations = [];
+let currentMode = 'click';
+let drawnItems;
+let apiKeys = {
+  openWeather: '',
+  weatherApi: ''
+};
+let selectedDateTime = null;
+
 // Initialize storage on page load
 function initStorage() {
   const savedOpenWeather = localStorage.getItem('openWeatherApiKey');
@@ -13,16 +25,6 @@ function initStorage() {
   
   console.log('Storage initialized');
 }
-// Global variables
-let map;
-let locations = [];
-let currentMode = 'click';
-let drawnItems;
-let apiKeys = {
-  openWeather: '',
-  weatherApi: ''
-};
-let selectedDateTime = null;
 
 // Enhanced library loading
 function loadScript(src) {
@@ -47,29 +49,8 @@ async function initializeCompleteApp() {
     console.log('All libraries loaded successfully!');
     setTimeout(() => {
       initDateTime();
-      async function initializeCompleteApp() {
-  try {
-    console.log('Loading Leaflet library...');
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js');
-    
-    console.log('Loading Leaflet Draw plugin...');
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js');
-    
-    console.log('All libraries loaded successfully!');
-  setTimeout(() => {
-      initDateTime();
       initStorage();
       restoreApiKeyInputs();
-      updateApiKeyDisplay();
-      initMap();
-      console.log('Complete Alpine Weather App ready!');
-    }, 100);
-    
-  } catch (error) {
-    console.error('Library loading failed:', error);
-    alert('Failed to load map libraries. Please refresh the page.');
-  }
-}
       initMap();
       console.log('Complete Alpine Weather App ready!');
     }, 100);
@@ -92,6 +73,7 @@ function initDateTime() {
   
   updateSelectedDateTime();
 }
+
 // Restore saved API keys to input fields
 function restoreApiKeyInputs() {
   const openWeatherKey = localStorage.getItem('openWeatherApiKey');
@@ -106,23 +88,7 @@ function restoreApiKeyInputs() {
   
   console.log('API key inputs restored');
 }
-// Load saved API keys from browser storage
-function loadSavedApiKeys() {
-  const savedOpenWeather = localStorage.getItem('openWeatherApiKey');
-  const savedWeatherApi = localStorage.getItem('weatherApiKey');
-  
-  if (savedOpenWeather) {
-    apiKeys.openWeather = savedOpenWeather;
-    document.getElementById('openWeatherApiKey').value = savedOpenWeather;
-  }
-  
-  if (savedWeatherApi) {
-    apiKeys.weatherApi = savedWeatherApi;
-    document.getElementById('weatherApiKey').value = savedWeatherApi;
-  }
-  
-  console.log('Saved API keys loaded!');
-}
+
 function updateSelectedDateTime() {
   const dateInput = document.getElementById('dateInput').value;
   const timeInput = document.getElementById('timeInput').value;
@@ -216,8 +182,6 @@ function setupEventListeners() {
       if (layer instanceof L.Marker) {
         map.removeLayer(layer);
       }
-        updateApiKeyDisplay();
-}
     });
   });
 
@@ -225,16 +189,14 @@ function setupEventListeners() {
   document.getElementById('dateInput').addEventListener('change', updateSelectedDateTime);
   document.getElementById('timeInput').addEventListener('change', updateSelectedDateTime);
 
-  // Multi-source API key handling
- // Save API keys to browser storage when entered
- document.getElementById('openWeatherApiKey').addEventListener('change', function(e) {
+  // Multi-source API key handling with save
+  document.getElementById('openWeatherApiKey').addEventListener('change', function(e) {
     apiKeys.openWeather = e.target.value.trim();
     localStorage.setItem('openWeatherApiKey', apiKeys.openWeather);
     updateApiKeyDisplay();
-      console.log('OpenWeather API key saved');
+    console.log('OpenWeather API key saved');
     if (apiKeys.openWeather) {
       locations.forEach(loc => fetchWeatherData(loc));
-      
     }
   });
 
@@ -247,6 +209,16 @@ function setupEventListeners() {
       locations.forEach(loc => fetchWeatherData(loc));
     }
   });
+
+  // Enter key support for search
+  document.getElementById('locationSearch').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      searchLocation();
+    }
+  });
+
+  // Call updateApiKeyDisplay after all listeners are set up
+  setTimeout(updateApiKeyDisplay, 200);
 }
 
 function updateModeButtons() {
@@ -256,6 +228,43 @@ function updateModeButtons() {
   } else if (currentMode === 'polygon') {
     document.getElementById('polygonMode').classList.add('active');
   }
+}
+
+// Toggle instructions visibility
+function toggleInstructions() {
+  const instructions = document.getElementById('instructions');
+  instructions.classList.toggle('collapsed');
+}
+
+// Show/hide API key box based on saved keys
+function updateApiKeyDisplay() {
+  const hasOpenWeather = localStorage.getItem('openWeatherApiKey');
+  const hasWeatherApi = localStorage.getItem('weatherApiKey');
+  
+  const apiKeyBox = document.getElementById('apiKeyBox');
+  const apiStatus = document.getElementById('apiStatus');
+  
+  if (!apiKeyBox || !apiStatus) {
+    console.log('API elements not found yet');
+    return;
+  }
+  
+  if (hasOpenWeather || hasWeatherApi) {
+    apiKeyBox.classList.add('hidden');
+    apiStatus.style.display = 'block';
+  } else {
+    apiKeyBox.classList.remove('hidden');
+    apiStatus.style.display = 'none';
+  }
+}
+
+// Show API key box for editing
+function showApiKeyBox() {
+  const apiKeyBox = document.getElementById('apiKeyBox');
+  const apiStatus = document.getElementById('apiStatus');
+  
+  apiKeyBox.classList.remove('hidden');
+  apiStatus.style.display = 'none';
 }
 
 // Enhanced search functionality
@@ -674,7 +683,7 @@ function analyzePolygonWeather(polygonLayer) {
 
   points.forEach((point, index) => {
     if (locations.length < 10) {
-      addLocationByCoordinates(point.lat, point.lng, `Area Point ${index + 1}`);
+      addLocationByCoordinates(point.lat, point.lng);
     }
   });
 }
@@ -774,7 +783,8 @@ function updateLocationsList() {
             UV Index
           </div>
           <div class="weather-detail">
-            <strong>🎯 ${weather.sourceCount}/3</strong>
+            <strong>🎯 ${weather.source
+                        Count}/3</strong>
             Active sources
           </div>
         </div>
@@ -803,41 +813,11 @@ function getWeatherIcon(weatherMain, clouds) {
   if (weatherMain === 'Mist' || weatherMain === 'Fog') return '🌫️';
   return '🌤️';
 }
-// Toggle instructions visibility
-function toggleInstructions() {
-  const instructions = document.getElementById('instructions');
-  instructions.classList.toggle('collapsed');
-}
 
-// Show/hide API key box based on saved keys
-function updateApiKeyDisplay() {
-  const hasOpenWeather = localStorage.getItem('openWeatherApiKey');
-  const hasWeatherApi = localStorage.getItem('weatherApiKey');
-  
-  const apiKeyBox = document.getElementById('apiKeyBox');
-  const apiStatus = document.getElementById('apiStatus');
-  
-  if (hasOpenWeather || hasWeatherApi) {
-    apiKeyBox.classList.add('hidden');
-    apiStatus.style.display = 'block';
-  } else {
-    apiKeyBox.classList.remove('hidden');
-    apiStatus.style.display = 'none';
-  }
-}
-
-// Show API key box for editing
-function showApiKeyBox() {
-  const apiKeyBox = document.getElementById('apiKeyBox');
-  const apiStatus = document.getElementById('apiStatus');
-  
-  apiKeyBox.classList.remove('hidden');
-  apiStatus.style.display = 'none';
-}
 // Start the complete app when page loads
 window.addEventListener('load', function() {
   initStorage();
   initializeCompleteApp();
 });
 
-console.log('Complete Alpine Weather App with reverse geocoding loaded successfully!');
+console.log('Complete Alpine Weather App with all improvements loaded successfully!');

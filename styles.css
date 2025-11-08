@@ -406,3 +406,32 @@ body {
 .instructions-toggle:hover {
   background: #0770c9;
 }
+.weather-sources {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-top: 10px;
+  font-size: 10px;
+}
+
+.model-badge {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 9px;
+  font-weight: bold;
+  color: #667eea;
+  display: inline-block;
+  margin-right: 3px;
+}
+
+.consensus-quality {
+  background: rgba(0, 184, 148, 0.1);
+  border: 1px solid rgba(0, 184, 148, 0.3);
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+}

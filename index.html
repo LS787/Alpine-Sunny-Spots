@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpine Sunny Spots - Multi-Source Weather Finder</title>
+    <title>Alpine Sunny Spots - 6-Source Weather Finder</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet" href="styles.css">
@@ -11,7 +11,7 @@
 <body>
     <div class="header">
         <h1>🏔️ Alpine Sunny Spots</h1>
-        <p>Find tomorrow's best weather in the Alps with multi-source data</p>
+        <p>Find tomorrow's best weather with 6-source multi-model consensus</p>
     </div>
 
     <div class="container">
@@ -33,44 +33,59 @@
                 </div>
             </div>
 
-           <div class="search-box">
-  <div class="api-status" id="apiStatus" style="display: none;">
-    <strong>✅ API Keys Saved!</strong><br>
-    <small>Your weather sources are active and ready</small><br>
-    <button onclick="showApiKeyBox()">Edit API Keys</button>
-  </div>
+            <div class="search-box">
+                <div class="api-status" id="apiStatus" style="display: none;">
+                    <strong>✅ API Keys Saved!</strong><br>
+                    <small>Your 6-source weather system is active</small><br>
+                    <button onclick="showApiKeyBox()">Edit API Keys</button>
+                </div>
 
-  <div class="api-key-box" id="apiKeyBox">
-    <strong>⚡ Multi-Source Weather Setup:</strong><br>
-    📡 <strong>Open-Meteo:</strong> Always active (no key needed!)<br>
-    🌤️ <strong>OpenWeatherMap:</strong> <a href="https://openweathermap.org/api" target="_blank">Get free API key</a><br>
-    <input type="password" class="api-key-input" id="openWeatherApiKey" placeholder="OpenWeatherMap API key (optional)">
-    ⚡ <strong>WeatherAPI:</strong> <a href="https://www.weatherapi.com/" target="_blank">Get free API key</a><br>
-    <input type="password" class="api-key-input" id="weatherApiKey" placeholder="WeatherAPI key (optional)">
-  </div>
+                <div class="api-key-box" id="apiKeyBox">
+                    <strong>⚡ 6-Source Weather Setup:</strong><br>
+                    <small>🎯 Alpine-Optimized Multi-Model System</small><br><br>
+                    
+                    <strong>Always Active (No keys needed):</strong><br>
+                    📡 <strong>Open-Meteo ECMWF</strong> - Most accurate for Alps<br>
+                    🇩🇪 <strong>Open-Meteo ICON</strong> - German Alpine model<br>
+                    🌍 <strong>Open-Meteo GFS</strong> - US global model<br><br>
+                    
+                    <strong>Optional Enhanced Sources:</strong><br>
+                    🌤️ <strong>OpenWeatherMap:</strong> <a href="https://openweathermap.org/api" target="_blank">Get API key</a><br>
+                    <input type="password" class="api-key-input" id="openWeatherApiKey" placeholder="OpenWeatherMap API key (optional)">
+                    
+                    ⚡ <strong>WeatherAPI:</strong> <a href="https://www.weatherapi.com/" target="_blank">Get API key</a><br>
+                    <input type="password" class="api-key-input" id="weatherApiKey" placeholder="WeatherAPI key (optional)">
+                    
+                    🎨 <strong>Visual Crossing:</strong> <a href="https://www.visualcrossing.com/weather-api" target="_blank">Get API key</a><br>
+                    <input type="password" class="api-key-input" id="visualCrossingApiKey" placeholder="Visual Crossing API key (optional)">
+                </div>
 
-  <button class="instructions-toggle" onclick="toggleInstructions()">
-    📖 How to Use
-  </button>
+                <button class="instructions-toggle" onclick="toggleInstructions()">
+                    📖 How to Use
+                </button>
 
-  <div class="instructions collapsed" id="instructions">
-    <strong>How to use:</strong><br>
-    • <strong>Basic:</strong> Works immediately with Open-Meteo (no API key needed!)<br>
-    • <strong>Enhanced:</strong> Add API keys above for multi-source weather comparison<br>
-    • Click "📍 Click Points" and click up to 10 locations on the map<br>
-    • Or click "⬟ Draw Area" and draw a polygon to compare weather in that region<br>
-    • Or search for specific Alpine locations below
-  </div>
+                <div class="instructions collapsed" id="instructions">
+                    <strong>How to use:</strong><br>
+                    • <strong>Basic:</strong> Works immediately with 3 Open-Meteo models!<br>
+                    • <strong>Enhanced:</strong> Add API keys for 6-source consensus<br>
+                    • Click "📍 Click Points" and click up to 10 locations<br>
+                    • Or click "⬟ Draw Area" to compare weather in a region<br>
+                    • Or search for Alpine locations below<br><br>
+                    <strong>Weather Models:</strong><br>
+                    • ECMWF = European model (most accurate)<br>
+                    • ICON = German model (Alpine-optimized)<br>
+                    • GFS = US model (global perspective)
+                </div>
 
-  <input type="text" class="search-input" id="locationSearch" placeholder="Search Alpine locations (e.g., Chamonix, Zermatt, Innsbruck)">
-  <button class="search-btn" onclick="searchLocation()">🔍 Add Location</button>
-</div>
+                <input type="text" class="search-input" id="locationSearch" placeholder="Search Alpine locations (e.g., Chamonix, Zermatt, Innsbruck)">
+                <button class="search-btn" onclick="searchLocation()">🔍 Add Location</button>
+            </div>
 
             <div class="locations-list">
-                <h3>📊 Multi-Source Weather Comparison (0/10 locations)</h3>
+                <h3>📊 6-Source Weather Comparison (0/10 locations)</h3>
                 <div id="locationsList">
                     <div class="loading">
-                        Click on the map or search for locations to see multi-source weather forecast!
+                        Click on the map or search for locations to see 6-source weather consensus!
                     </div>
                 </div>
             </div>
